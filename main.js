@@ -2,14 +2,9 @@ const puppeteer = require("puppeteer");
 const fs = require("fs");
 const ioe = require("./ioe.json");
 
-const sheet = fs.createWriteStream("./resultioe.xlsx", {
-  flags: "a",
-});
-const khwopa = fs.createWriteStream("khwopa.json", { flags: "a" });
 const ranked = fs.createWriteStream(`ranked${Date.now()}.txt`, {
   flags: "a",
 });
-const xlsx = require("xlsx");
 getData = async (page, url) => {
   await page.goto(url);
   const name = await page.$$eval("table tr td:nth-child(2)", (options) =>
@@ -22,7 +17,6 @@ getData = async (page, url) => {
 };
 async function main() {
   let dataAll = [];
-  let url;
   let page_count;
   const browser = await puppeteer.launch({
     headless: false,
@@ -62,14 +56,8 @@ async function main() {
   }
   const Name = finalName.map((a) => a);
   const Roll = finalRoll.map((a) => a);
-  // console.log(finalName, finalRoll);
-  const finalNaiHo = [Name, Roll];
-  const wb = xlsx.utils.book_new();
-  const ws = xlsx.utils.json_to_sheet(finalNaiHo);
-  xlsx.utils.book_append_sheet(wb, ws);
-  xlsx.writeFile(wb, `./datas/scarped${Date.now()}.xlsx`);
-  // console.log(ioe.map((a) => a.FormNo === finalRoll.map((a) => a)));
-  // isMatch = ioe.map((a) => a.FormNo === finalRoll.map((a) => a));
+  // const finalNaiHo = [Name, Roll];
+
   for (roll of finalRoll) {
     ioe.map((a) => {
       a.FormNo === roll ? matchedRoll.push(a.Rank) : null;
@@ -87,6 +75,5 @@ async function main() {
   await browser.close();
   ranked.end();
   console.log("\nTotal number of Applicants:", finalRoll.length);
-
 }
 main();

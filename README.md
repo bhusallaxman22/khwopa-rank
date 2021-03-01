@@ -4,6 +4,7 @@ This is a simple web-scrapper built using nodejs and puppeteer. The scrapper scr
 # How to use it
 1. Make sure nodejs and npm are installed. 
 2. Run `npm install`.
+3. Run `node main`
 
 # What can it do
 - Gets verified applicant name list and stores them in an array.
